@@ -1,0 +1,127 @@
+# # 1. создать нового клиента
+# # 2. удалить старого клиента
+# # 3. просмотреть список клиентов
+# # 4. добавить определенному клиенту услугу
+# # 5. удалить у определеного клиента услугу
+# # 6. посмотреть у определенного клиента список услуг
+# # фамилия имя отчество
+# # возраст
+# # пол
+# # телефон
+# # адрес
+# # услуги(кредитная карта,дебетовая карта, вклад, кредит, пос кредит)
+#
+# # кредитная карта(грейс период(есть или нет),сумма карты, бонусная программа)
+# # дебетовая карта(бонусная программа, проценты на остаток)
+# # вклад(срок, сумма, процент,капитализация процентов)
+# # кредит(сумма, процент, срок)
+# # POS кредит(сумма, срок, процент)
+
+def print_menu(menu):
+    print('Добрый день!Выберите желаемый вариант:')
+    for i, key in enumerate(menu, start=1):
+        print(f"{i}. {key}")
+
+
+def get_command(limit):
+    command = int(input("Введите команду: "))
+    if 1 <= command <= limit:
+        return command
+
+
+def add_client(base_customers):
+    name_client = input('Введите ФИО клиента: ')
+    if name_client not in base_customers:
+        base_customers[name_client] = []
+        print("Клиент добавлен в базу!")
+    else:
+        print("Клиент с таким именем уже существует!")
+
+
+def delete_client(base_customers):
+    name_client = input('Введите ФИО клиента: ')
+    if name_client in base_customers:
+        base_customers.pop(name_client)
+        print("Клиент удален из базы!")
+    else:
+        print("Клиента с таким именем не существует!")
+
+
+def print_clients(base_customers):
+    print(base_customers)
+
+
+def add_product(base_customers):
+    name_client = input('Введите ФИО клиента: ')
+    if name_client in base_customers:
+        print_product()
+        product = int(input("Выберите желаемый продукт: "))
+        if product == 1:
+            base_customers[name_client].append("кредитная карта")
+        elif product == 2:
+            base_customers[name_client].append("дебетовая карта")
+        elif product == 3:
+            base_customers[name_client].append("вклад")
+        elif product == 4:
+            base_customers[name_client].append("кредит")
+        elif product == 5:
+            base_customers[name_client].append("POS кредит")
+        print("Продукт добавлен клиенту!")
+    else:
+        print("Клиента с таким именем не существует!")
+
+
+def delete_product(base_customers):
+    name_client = input('Введите ФИО клиента: ')
+
+    if name_client in base_customers:
+        print_product()
+        product = int(input("Выберите желаемый продукт: "))
+        if product == 1:
+            product = "кредитная карта"
+        elif product == 2:
+            product = "дебетовая карта"
+        elif product == 3:
+            product = "вклад"
+        elif product == 4:
+            product = "кредит"
+        elif product == 5:
+            product = "POS кредит"
+
+        if product in base_customers[name_client]:
+            base_customers[name_client].remove(product)
+        else:
+            print("У клиента не существует такого продукта!")
+        print("Продукт удален из списка клиента!")
+    else:
+        print("Клиента с таким именем не существует!")
+
+
+def show_product_of_client(base_customers):
+    name_client = input('Введите ФИО клиента: ')
+    if name_client in base_customers:
+        client = base_customers.get(name_client, '')
+        print(client)
+    else:
+        print("Клиента с таким именем не существует!")
+
+
+base_customers = dict()
+
+menu = {
+    'Создать нового клиента': add_client(base_customers),
+    'Удалить старого клиента': delete_client(base_customers),
+    'Просмотреть список клиентов': print_clients(base_customers),
+    'Добавить определенному клиенту услугу': add_product(base_customers),
+    'Удалить у определеного клиента услугу': delete_product(base_customers),
+    'Посмотреть у определенного клиента список услуг': show_product_of_client(base_customers),
+}
+
+while True:
+    print_menu(menu)
+    command = get_command(len(menu))
+    if command is not None:
+        key = list(menu.keys())[command - 1]
+        menu[key]()
+    else:
+        print("Ошибка!Такой команды нет!")
